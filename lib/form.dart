@@ -24,7 +24,7 @@ class _MyFormState extends State<MyForm> {
     return Scaffold(
         appBar: AppBar(
             backgroundColor: Colors.deepPurple.shade300,
-            title: const Text("Form"),
+            title: const Text("Shopping List"),
             centerTitle: true),
         body: Container(
           padding: const EdgeInsets.all(20.0),
