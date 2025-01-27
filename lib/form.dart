@@ -81,7 +81,7 @@ class MyTextField extends StatelessWidget {
     required this.myController,
     this.myIcon = Icons.verified_user_outlined,
     this.prefixIconColor = Colors.blueAccent,
-  });
+  }) : super(key: key);
 
   final TextEditingController myController;
   String fieldName;
