@@ -1,18 +1,45 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
-import 'form.dart';
+import 'package:get_it/get_it.dart';
+import 'package:sample_app/pages/login_page.dart';
+import 'package:sample_app/services/auth_service.dart';
+import 'package:sample_app/services/navigation_service.dart';
+import 'package:sample_app/utils.dart';
+import 'pages/form.dart';
 
-// ignore: prefer_const_constructors
-void main() => runApp(MyApp());
+void main() async {
+  await setup();
+  runApp(
+    MyApp()
+  );
+}
+
+Future<void> setup() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await setupFirebase();
+  await registerService();
+}
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  final GetIt _getIt = GetIt.instance;
+
+  late NavigationService _navigationService;
+  late AuthService _authService;
+
+  MyApp({super.key}) {
+    _navigationService = _getIt.get<NavigationService>();
+    _authService = _getIt.get<AuthService>(); 
+  }
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: '3.2 Flutter Push Pop',
+    return MaterialApp(
+      navigatorKey: _navigationService.navigatorKey,
+      title: 'Shopping List',
+      debugShowCheckedModeBanner: false,
       themeMode: ThemeMode.system,
-      home: MyForm(),
+      initialRoute: _authService.user != null ? "/home" : "/login",
+      routes: _navigationService.routes,
     );
   }
 }

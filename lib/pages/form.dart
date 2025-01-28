@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:sample_app/services/auth_service.dart';
+import 'package:sample_app/services/navigation_service.dart';
 import 'details.dart';
 
 class MyForm extends StatefulWidget {
@@ -9,8 +12,19 @@ class MyForm extends StatefulWidget {
 }
 
 class _MyFormState extends State<MyForm> {
+  final GetIt _getIt = GetIt.instance;
+  late AuthService _authService;
+  late NavigationService _navigationService;
+
   final _productController = TextEditingController();
   final _productDesController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _authService = _getIt.get<AuthService>();
+    _navigationService = _getIt.get<NavigationService>();
+  }
 
   @override
   void dispose() {
@@ -25,7 +39,20 @@ class _MyFormState extends State<MyForm> {
         appBar: AppBar(
             backgroundColor: Colors.deepPurple.shade300,
             title: const Text("Shopping List"),
-            centerTitle: true),
+            centerTitle: true,
+            actions: [
+            IconButton(
+              onPressed: () async {
+                bool result = await _authService.logOut();
+                if (result) {
+                  _navigationService.pushReplacementNamed("/login");
+                }
+              },
+              color: Colors.black,
+              icon: const Icon(Icons.logout),
+            ),
+          ],
+            ),
         body: Container(
           padding: const EdgeInsets.all(20.0),
           child: ListView(
